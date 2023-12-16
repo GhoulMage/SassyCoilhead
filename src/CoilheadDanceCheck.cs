@@ -14,6 +14,8 @@ namespace SassyCoilheadMod
         private float _checkTime;
         private bool _dancing;
 
+        public bool IsDancing => _dancing;
+
         public void StopDance()
         {
             if (!_dancing)

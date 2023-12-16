@@ -1,7 +1,7 @@
 Sassy Coilhead v0.1.0 (development)
 ==============
 
-Client-sided mod that makes the Coilhead do a funny dance if you stay near it for too long.
+Client-sided mod that makes the Coilhead do a funny dance if you stay near it for too long.<br>
 It knows it's gonna kill you.
 
 Bugs
@@ -19,18 +19,25 @@ Ignore everything here. Look at Releases or into the Thunderstore page to downlo
 
 For Devs
 --------
-1. Useful API:
-* static event CoilheadDanceCheck.OnCoilheadDance(SpringManAI); raises whenever a coilhead succesfully begins their dance.
-* CoilheadDanceCheck.StopDance(); No args.
+1. **Useful API**<br>
+* **static event CoilheadDanceCheck.OnCoilheadDance(SpringManAI);** raises whenever a coilhead succesfully begins their dance.<br>
+* **CoilheadDanceCheck.StopDance();** Stops any ongoing dance.<br>
+* **CoilheadDanceCheck.IsDancing;** True if currently dancing.<br>
 
-2. Dependencies
+> Besides all of that, know that the script CoilheadDanceCheck will attach itself to anything that spawns with SpringManAI
+
+<br>
+
+2. **Dependencies**
 * Assembly-CSharp.dll (From Lethal Company_Data/Managed)
 * UnityEngine.dll
 * Unity.Netcode.Runtime.dll
+<br>
 
-3. Build
+3. **Build**
 * Build normaly using dotnet or whatever.
 * Requires sassycoilhead Asset Bundle in BepinEx/plugins/GhoulMage/funny
+<br>
 
-4. Copyright
+4. **Copyright**
 * MIT License. For details see LICENSE
