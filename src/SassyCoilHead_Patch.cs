@@ -3,17 +3,40 @@ using UnityEngine;
 
 namespace SassyCoilheadMod.Patch
 {
-    internal class SassyCoilHead_PatchCoilhead
+    [HarmonyPatch(typeof(EnemyAI))]
+    internal class SassyCoilHead_Patch
     {
-        [HarmonyPatch(typeof(EnemyAI), "Start")]
-        [HarmonyPostfix]
-        private static void StartPostFix(EnemyAI enemyInstance)
+        [HarmonyPatch("Start")]
+        [HarmonyPrefix]
+        private static void CheckCoilhead(EnemyAI __instance)
         {
-            if (enemyInstance is SpringManAI)
+            if (__instance is SpringManAI)
             {
-                Debug.Log("Found the coilhead.");
-                SassyCoilhead_Helpers.CreateDetectorOn(enemyInstance as SpringManAI);
+                SassyCoilhead_PluginEntry.Log.LogInfo("Found the coilhead.");
+                SassyCoilhead_Helpers.CreateDetectorOn(__instance as SpringManAI);
             }
         }
     }
+
+#if DEBUG
+    [HarmonyPatch(typeof(RoundManager))]
+    internal class SassyCoilhead_DebugPatch
+    {
+        [HarmonyPatch("LoadNewLevel")]
+        [HarmonyPrefix]
+        private static bool ChangeSpawn(ref SelectableLevel newLevel)
+        {
+            foreach (SpawnableEnemyWithRarity enemy in newLevel.Enemies)
+            {
+                enemy.rarity = 0;
+                if (enemy.enemyType.enemyPrefab.GetComponent<SpringManAI>() != null)
+                {
+                    enemy.rarity = 999;
+                }
+            }
+            SassyCoilhead_PluginEntry.Log.LogInfo("DEBUG: All enemies but Coilhead disabled.");
+            return true;
+        }
+    }
+#endif
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using BepInEx;
 using BepInEx.Configuration;
+using BepInEx.Logging;
 using HarmonyLib;
+using SimpleCommand.API.Classes;
 using UnityEngine;
 
 namespace SassyCoilheadMod
@@ -15,14 +17,20 @@ namespace SassyCoilheadMod
         public const string VERSION = "0.1.0";
 
         internal ConfigEntry<float> _config_detectionRadius;
+        internal ConfigEntry<float> _config_danceWaitMinTime;
         internal ConfigEntry<byte> _config_danceChance;
 
+        internal static ManualLogSource Log;
+
         public static float DetectionRadius { get; private set; }
+        public static float DanceWaitMinTime { get; private set; }
         public static float DanceChance { get; private set; }
+        internal static RuntimeAnimatorController DanceControllerAsset { get; private set; }
         internal static AnimationClip DanceClipAsset { get; private set; }
 
         private void Awake()
         {
+            Log = Logger;
             Logger.LogInfo($"Mod {NAME} ver {VERSION} ({GUID}) is loaded!");
             DoPatch.This(GUID);
 
@@ -40,20 +48,29 @@ namespace SassyCoilheadMod
                 Logger.LogError("Failed to load Coilhead's dance...");
                 return;
             }
-            DanceClipAsset = bundle.LoadAsset<AnimationClip>("Assets/sassycoilhead_dance.anim");
+            DanceClipAsset = bundle.LoadAsset<AnimationClip>("Assets/sassy_dance.anim");
             if (DanceClipAsset == null)
             {
                 Logger.LogInfo("Failed to load Coilhead's dance...");
                 return;
             }
+            DanceControllerAsset = bundle.LoadAsset<RuntimeAnimatorController>("Assets/sassy_dance_controller.controller");
+            if (DanceControllerAsset == null)
+            {
+                Logger.LogInfo("Failed to load Coilhead's dance...");
+                return;
+            }
             Logger.LogInfo("Succesfully loaded Coilhead's dance!");
+            bundle.Unload(false);
         }
         private void FetchConfigurationValues()
         {
-            _config_detectionRadius = Config.Bind(ConfigName, "DetectionRange", 5.5f, "The player has to be inside this range to see the coilhead dance.");
-            _config_danceChance = Config.Bind<byte>(ConfigName, "Dance Chance", (byte)255 / 4, "Chance between 0 and 255 that the coilhead will dance.");
+            _config_detectionRadius = Config.Bind(ConfigName, "Detection Range (meters)", 9.5f, "Coilhead has to be inside this range of a player to check if it should dance.");
+            _config_danceWaitMinTime = Config.Bind(ConfigName, "Minimum Wait Time (seconds)", 5f, "Minimum time to stay still without dancing near any player.");
+            _config_danceChance = Config.Bind<byte>(ConfigName, "Dance Chance (0-255)", 255 / 6, "Chance that the coilhead will dance every 2 seconds.");
 
             DetectionRadius = _config_detectionRadius.Value;
+            DanceWaitMinTime = _config_danceWaitMinTime.Value;
             DanceChance = _config_danceChance.Value / 255f;
         }
     }

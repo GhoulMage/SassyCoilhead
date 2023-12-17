@@ -23,6 +23,9 @@
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>lib/Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="SimpleCommand.API">
+      <HintPath>lib/SimpleCommand.API.dll</HintPath>
+    </Reference>
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
