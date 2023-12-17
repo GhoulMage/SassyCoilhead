@@ -1,16 +1,26 @@
-Sassy Coilhead v0.1.0 (development)
+Sassy Coilhead v1.0.0 (stable)
 ==============
 
 Client-sided mod that makes the Coilhead do a funny dance if you stay near it for too long.<br>
-It knows it's gonna kill you.
+
+> It knows it's gonna kill you.
+
+Features
+--------
+* It works.
+* Should be compatible with anything.
+* Configurable in config/ghoulmage.funny.sassycoilhead.cfg
 
 Bugs
-----
-* Who knows.
+--------
+* Shouldn't have.
+* But... I have a hunch that it's easier for the Coilhead to kill you if you stand very very close to it (similar to standing near it and looking at its head instead of at its body).
+<br>
+
+I'll update this mod as needed. Report any bugs, incompatibilities or push request the appropiate fixes and I'll look into them.
 
 To-do
------
-* Hope it works
+--------
 * Server-side sync?
 
 For Players
@@ -41,3 +51,13 @@ For Devs
 
 4. **Copyright**
 * MIT License. For details see LICENSE
+<br>
+
+5. **"How did you create an animation for it?"**
+Basically, get the SpringMan GameObject from the game's assets (in shared assets1) and the body mesh (It's called Body, was hard to find).<br>
+Then, clean up all missing references from SpringMan and set the Body mesh to it's missing mesh reference.<br>
+Add an Animation component wherever the Animator is and create an animation clip. Create an AnimatorController with only that clip inside.<br>
+Export the AnimationClip and AnimatorController in an AssetBundle, load it into the mod and replace the original coilhead RuntimeAnimatorController wtih mine whenever I want to make it dance.<br>
+
+6. **When I build this by myself, all I can see is Coilhead. Coilhead everywhere...**
+With a DEBUG symbol it will add a patch to set the rarities of anything but coilheads to 999. Remove the code or build without DEBUG.<br>
