@@ -12,7 +12,7 @@ namespace SassyCoilheadMod.Patch
         {
             if (__instance is SpringManAI)
             {
-                SassyCoilhead_PluginEntry.Log.LogInfo("Found the coilhead.");
+                SassyCoilhead_PluginEntry.Log.LogInfo("Found a coilhead. Attaching dance script.");
                 SassyCoilhead_Helpers.CreateDetectorOn(__instance as SpringManAI);
             }
         }

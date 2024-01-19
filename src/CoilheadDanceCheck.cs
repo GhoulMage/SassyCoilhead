@@ -37,18 +37,30 @@ namespace SassyCoilheadMod
             _checkTime = CheckTimeInterval;
 
             _danceController = SassyCoilhead_PluginEntry.DanceControllerAsset;
-            //_danceController = SassyCoilhead_Helpers.CreateAnimatorOverride(_coilheadAnimator, SassyCoilhead_PluginEntry.DanceClipAsset);
         }
 
         private bool NearAnyPlayer()
         {
-            Vector3 closestPlayerPosition = _coilhead.GetClosestPlayer(false, false, false).transform.position;
-            //Sphere check
-            return (_coilhead.transform.position - closestPlayerPosition).sqrMagnitude <= (SassyCoilhead_PluginEntry.DetectionRadius * SassyCoilhead_PluginEntry.DetectionRadius);
+            var nearestPlayer = _coilhead?.GetClosestPlayer(false, false, false);
+            if (nearestPlayer != null)
+            {
+                Vector3 closestPlayerPosition = nearestPlayer.transform.position;
+                //Sphere check
+                return (_coilhead.transform.position - closestPlayerPosition).sqrMagnitude <= (SassyCoilhead_PluginEntry.DetectionRadius * SassyCoilhead_PluginEntry.DetectionRadius);
+            }
+
+            return false;
         }
 
         private void LateUpdate()
         {
+            //Shouldn't happen because if this script gets attached to the coilhead, it should be gone alongside the entity whenever it gets destroyed.
+            if (_coilhead == null)
+            {
+                Destroy(this);
+                return;
+            }
+
             if (_dancing)
             {
                 if (!NearAnyPlayer())

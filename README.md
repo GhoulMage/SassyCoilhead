@@ -1,4 +1,4 @@
-Sassy Coilhead v1.0.0 (stable)
+Sassy Coilhead v1.0.1 (stable)
 ==============
 
 Client-sided mod that makes the Coilhead do a funny dance if you stay near it for too long.<br>

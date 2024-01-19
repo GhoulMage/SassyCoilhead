@@ -1,0 +1,7 @@
+*.exe
+*.sln
+*.dll
+obj/
+lib/
+bin/
+.fake

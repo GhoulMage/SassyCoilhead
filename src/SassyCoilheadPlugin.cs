@@ -13,7 +13,7 @@ namespace SassyCoilheadMod
     {
         public const string GUID = "ghoulmage.funny.sassycoilhead";
         public const string NAME = "Sassy Coilhead";
-        public const string VERSION = "1.0.0";
+        public const string VERSION = "1.0.1";
 
         internal ConfigEntry<float> _config_detectionRadius;
         internal ConfigEntry<float> _config_danceWaitMinTime;
