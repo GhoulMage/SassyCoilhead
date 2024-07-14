@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
@@ -13,7 +14,11 @@ namespace SassyCoilheadMod
     {
         public const string GUID = "ghoulmage.funny.sassycoilhead";
         public const string NAME = "Sassy Coilhead";
-        public const string VERSION = "1.0.1";
+        public const string VERSION = "1.0.2";
+
+        public static float DetectionRadius { get; private set; }
+        public static float DanceWaitMinTime { get; private set; }
+        public static float DanceChance { get; private set; }
 
         internal ConfigEntry<float> _config_detectionRadius;
         internal ConfigEntry<float> _config_danceWaitMinTime;
@@ -21,9 +26,6 @@ namespace SassyCoilheadMod
 
         internal static ManualLogSource Log;
 
-        public static float DetectionRadius { get; private set; }
-        public static float DanceWaitMinTime { get; private set; }
-        public static float DanceChance { get; private set; }
         internal static RuntimeAnimatorController DanceControllerAsset { get; private set; }
         internal static AnimationClip DanceClipAsset { get; private set; }
 
@@ -38,10 +40,19 @@ namespace SassyCoilheadMod
         }
 
         const string ConfigName = "SassyCoilhead";
+        const string AssetBundleRelativePath = "\\GhoulMage\\funny\\";
+        const string AssetBundleFilename = "sassycoilhead";
 
         private void LoadDanceFromAssetBundle()
         {
-            AssetBundle bundle = AssetBundle.LoadFromFile(Paths.PluginPath + "\\GhoulMage\\funny\\sassycoilhead");
+            string assetBundleFilePath = GetAssetBundlePath();
+            if (assetBundleFilePath == null)
+            {
+                Logger.LogError("Failed to locate AssetBundle...");
+                return;
+            }
+
+            AssetBundle bundle = AssetBundle.LoadFromFile(assetBundleFilePath);
             if (bundle == null)
             {
                 Logger.LogError("Failed to load Coilhead's dance...");
@@ -62,6 +73,18 @@ namespace SassyCoilheadMod
             Logger.LogInfo("Succesfully loaded Coilhead's dance!");
             bundle.Unload(false);
         }
+
+        private string GetAssetBundlePath()
+        {
+            string result = SassyCoilhead_Helpers.FindFolderIn(Paths.PluginPath, AssetBundleRelativePath);
+            if (result != null)
+            {
+                result = Path.Join(result, AssetBundleFilename);
+                return result;
+            }
+            return null;
+        }
+
         private void FetchConfigurationValues()
         {
             _config_detectionRadius = Config.Bind(ConfigName, "Detection Range (meters)", 9.5f, "Coilhead has to be inside this range of a player to check if it should dance.");

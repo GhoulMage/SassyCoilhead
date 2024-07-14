@@ -1,4 +1,4 @@
-Sassy Coilhead v1.0.1 (stable)
+Sassy Coilhead v1.0.2 (stable)
 ==============
 
 Client-sided mod that makes the Coilhead do a funny dance if you stay near it for too long.<br>
@@ -11,10 +11,10 @@ Features
 * Should be compatible with anything.
 * Configurable in config/ghoulmage.funny.sassycoilhead.cfg
 
-Bugs
+Bugs/Incompatibilities
 --------
-* Shouldn't have.
-* But... I have a hunch that it's easier for the Coilhead to kill you if you stand very very close to it (similar to standing near it and looking at its head instead of at its body, but without looking at its head part).
+* External Issue: As of version 1.0.2 this should not be an issue, but heads up: Some autoinstallers (like mod managers) might change how the mod folders are structured. Make sure that the folders GhoulMage/funny are inside any folder inside the plugins folder and that the file 'sassycoilhead' exists inside the 'funny' folder. ie "plugins/blabla/moreblabla/GhoulMage/funny/sassycoilhead"
+* Probable Issue (Untested): I have a hunch that it's easier for the Coilhead to kill you if you stand very very close to it while it is dancing because the player camera might clip into the collider. I would consider it a glitch instead of a bug, and I won't fix it to avoid conflicts with other Coilhead mods.
 <br>
 
 I'll update this mod as needed. Report any bugs, incompatibilities or push request the appropiate fixes and I'll look into them.
@@ -25,7 +25,7 @@ To-do
 
 For Players
 -----------
-Ignore everything here. Look at Releases or into the Thunderstore page to download a working build with the Asset Bundle in the correct folder.
+Ignore everything here. Look at Releases or into the [Thunderstore page](https://thunderstore.io/c/lethal-company/p/GhoulMage/SassyCoilhead/) to download a working build with the Asset Bundle in the correct folder.
 
 For Devs
 --------
@@ -34,7 +34,7 @@ For Devs
 * **CoilheadDanceCheck.StopDance();** Stops any ongoing dance.<br>
 * **CoilheadDanceCheck.IsDancing;** True if currently dancing.<br>
 
-> Besides all of that, know that the script CoilheadDanceCheck will attach itself to anything that spawns with SpringManAI
+> Besides all of that, know that the script CoilheadDanceCheck will attach itself to anything that spawns with SpringManAI, so you can find it with GetComponent()
 
 <br>
 
@@ -45,12 +45,13 @@ For Devs
 <br>
 
 3. **Build**
-* Build normaly using dotnet or whatever.
-* Requires sassycoilhead Asset Bundle in BepinEx/plugins/GhoulMage/funny
+* Build normaly using dotnet or whatever .NET build method you want.
+* Exclude the DEBUG symbol for the intended behaviour. Otherwise, a test code that replaces all enemies with Coilhead will execute on all levels.
+* Requires sassycoilhead Asset Bundle in GhoulMage/funny, inside any folder in the BepinEx plugins.
 <br>
 
 4. **Copyright**
-* MIT License. For details see LICENSE
+* MIT License. For details see [LICENSE.md](https://github.com/GhoulMage/SassyCoilhead/blob/main/LICENSE.md)
 <br>
 
 5. **"How did you create an animation for it?"**
@@ -58,6 +59,3 @@ Basically, get the SpringMan GameObject from the game's assets (in shared assets
 Then, clean up all missing references from SpringMan and set the Body mesh to it's missing mesh reference.<br>
 Add an Animation component wherever the Animator is and create an animation clip. Create an AnimatorController with only that clip inside.<br>
 Export the AnimationClip and AnimatorController in an AssetBundle, load it into the mod and replace the original coilhead RuntimeAnimatorController wtih mine whenever I want to make it dance.<br>
-
-6. **When I build this by myself, all I can see is Coilhead. Coilhead everywhere...**
-With a DEBUG symbol it will add a patch to set the rarities of anything but Coilheads to 0. Remove the code or build without DEBUG.<br>
